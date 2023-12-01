@@ -80,3 +80,16 @@ def test_invalid_authentication():
     response = requests.get(ENDPOINT + "/protected-endpoint", auth=("invalid_user", "invalid_password"))
     assert response.status_code == 401  # 401 Unauthorized
 
+
+def test_can_mark_task_as_high_priority():
+    task_id = "task1"
+    mark_priority_payload = {"priority": "high"}
+    mark_priority_response = requests.post(ENDPOINT + f"/mark-priority/{task_id}", json=mark_priority_payload)
+    assert mark_priority_response.status_code == 200
+
+    get_marked_priority_response = requests.get(ENDPOINT + f"/get-task/{task_id}")
+    assert get_marked_priority_response.status_code == 200
+
+    marked_priority_data = get_marked_priority_response.json()
+    assert marked_priority_data["priority"] == "high"
+
