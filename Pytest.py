@@ -65,6 +65,15 @@ def test_can_list_all_tasks():
     assert list_tasks_response.status_code == 200
     tasks_data = list_tasks_response.json()
     assert isinstance(tasks_data, list)
+
+
+def test_can_filter_tasks_by_user():
+    user_id = "tester"
+    filter_tasks_response = requests.get(ENDPOINT + f"/filter-tasks?user_id={user_id}")
+    assert filter_tasks_response.status_code == 200
+    filtered_tasks_data = filter_tasks_response.json()
+    for task in filtered_tasks_data:
+        assert task["user_id"] == user_id
     
 
 def test_invalid_authentication():
