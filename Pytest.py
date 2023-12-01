@@ -93,3 +93,16 @@ def test_can_mark_task_as_high_priority():
     marked_priority_data = get_marked_priority_response.json()
     assert marked_priority_data["priority"] == "high"
 
+
+def test_can_archive_completed_tasks():
+    task_id = "task1"
+    update_payload = {"is_done": True}
+    update_task_response = requests.post(ENDPOINT + f"/update-task/{task_id}", json=update_payload)
+    assert update_task_response.status_code == 200
+
+    archive_completed_payload = {"archive_completed": True}
+    archive_completed_response = requests.post(ENDPOINT + "/archive-completed-tasks", json=archive_completed_payload)
+    assert archive_completed_response.status_code == 200
+
+    get_archived_task_response = requests.get(ENDPOINT + f"/get-task/{task_id}")
+    assert get_archived_task_response.status_code == 404  # 404 Not Found
