@@ -60,6 +60,13 @@ def test_can_delete_task():
     assert get_deleted_task_response.status_code == 404  # 404 Not Found
 
 
+def test_can_list_all_tasks():
+    list_tasks_response = requests.get(ENDPOINT + "/list-tasks")
+    assert list_tasks_response.status_code == 200
+    tasks_data = list_tasks_response.json()
+    assert isinstance(tasks_data, list)
+    
+
 def test_invalid_authentication():
     response = requests.get(ENDPOINT + "/protected-endpoint", auth=("invalid_user", "invalid_password"))
     assert response.status_code == 401  # 401 Unauthorized
